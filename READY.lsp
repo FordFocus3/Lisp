@@ -1,48 +1,44 @@
-; Задание 9. 
-; Определите функцию, разделяющую исходный список на два подсписка. В
+; #9 Определите функцию, разделяющую исходный список на два подсписка. В
 ; первый из них должны попасть элементы с нечетными номерами, во второй —
 ; элементы с четными номерами.
 
-; Код:
-
-
-(defun sub-lists(lst)
-      (cond
-         ((null lst) '(() ()))
-         ( (evenp (car lst)) (cons (car (sub-lists(cdr lst))) (cons (cons (car lst)   (cadr (sub-lists(cdr lst))))())))
-         (t(cons (cons (car lst) (car (sub-lists(cdr lst)))) (cdr (sub-lists(cdr lst)))))
-       )
+(defun split (lst)
+    (cond                  
+        ((null lst)         
+            '(nil nil)      
+        )
+        (t                  
+            ((lambda (l f s)                        
+                (cons                               
+                    (cons f (car l))                
+                    (cons                           
+                        (cond                       
+                            ((null s)              
+                                (cadr l)            
+                            )
+                            (t                      
+                                (cons s (cadr l))   
+                            )
+                        )                           
+                    nil)                            
+                )                                   
+            ) (split (cddr lst)) (car lst) (cadr lst))
+        )
+    )
 )
-;
-;------------------------------------------------------------------------------
-;
 
-(print(sub-lists '(1 2 3 4 5 6)))
-(print(sub-lists '(1 2 3 4)))
+;;; Test 1
+(write-line "Test 1")
+(princ " >> (1 2 3 4)")
+(print (split '(1 2 3 4)))
+(write-line "")
 
-;
-;------------------------------------------------------------------------------
-;
+;;; Test 2
+(write-line "Test 2")
+(princ " >> (1 2 3)")
+(print (split '(1 2 3)))
+(write-line "")
 
-; Задание 19.
-
-; Определите функцию (ЛУКОВИЦА n), строящую N-уровневый вложенный список, элементом которого на самом глубоком уровне является N.
-
-;Код:
-
-(defun луковица (n)
-    (_луковица n n))
-(defun _луковица (n v)
-    (cond((= n 0)v)
-        (t(cons (_луковица (- n 1) v) nil))))
-
-;
-;------------------------------------------------------------------------------
-;
-
-
-(print (луковица 5))
-(print (луковица 2))
 
 
 ;
@@ -50,116 +46,272 @@
 ;
 
 
-; Залание 25. 
 
-; Определите функцию, удаляющую из списка каждый четный элемент
-
-; Код:
-
-(defun filter (lst)
-    (cond((null lst)nil)
-        (t(cons(car lst)
-            (filter (cddr lst))))))
-;
-;------------------------------------------------------------------------------
-;
-
-(print (filter '(1 2 3 4)))
-(print (filter '(1 2 3 4 5 6)))
-
-;
-;------------------------------------------------------------------------------
-;
-
-
-; Задание 26
-; Определите функцию, разбивающую список (a b с d...) на пары ((а b) (с d)...).
-
-(defun pairs (lst)
-    (cond((null lst)nil)
-        (t(cons(cons (car lst) (cons (cadr lst) nil))
-                (pairs (cddr lst))))))
-
-
-;
-;------------------------------------------------------------------------------
-;
-(print (pairs '(1 2 3 4 5 6)))
-(print (pairs '(1 2 3)))
-
-;
-;------------------------------------------------------------------------------
-;
-
-; Задание 29 
-; Определите функцию, вычисляющую глубину списка (самой глубокой ветви).
+; #29 Определите функцию, вычисляющую глубину списка (самой глубокой ветви).
 
 (defun depth (lst)
-    (cond((null lst)0)
-       (t(max(+ (depth (car lst)) 1)
-           (depth (cdr lst))))))
-;
-;------------------------------------------------------------------------------
-;
+    (cond
+        ((null lst)
+            0
+        )
+        (t
+            (max
+                (+ (depth (car lst)) 1)
+                (depth (cdr lst))
+            )
+        )
+    )
+)
+
+;;; Test 1
+(write-line "Test 1")
+(princ ">> (nil (nil) nil)")
 (print (depth '(nil (nil) nil)))
+(write-line "")
+
+;;; Test 2
+(write-line "Test 2")
+(princ ">> (nil (nil) ((nil)))")
 (print (depth '(nil (nil) ((nil)))))
+(write-line "")
+
+
+
 ;
 ;------------------------------------------------------------------------------
 ;
 
-
-; Задание 34
-; Определите предикат РАВЕНСТВО-МНОЖЕСТВ, проверяющий совпадение двух множеств (независимо от порядка следования элементов).
-
+; #34 Определите предикат РАВЕНСТВО-МНОЖЕСТВ, проверяющий совпадение двух множеств (независимо от порядка следования элементов). 
 
 (defun equal-set (lst-a lst-b)
-    (cond((and (null lst-a) (null lst-b))T)
-        ((or (null lst-a) (null lst-b))nil)
-        (t(equal-set (cdr lst-a) (remove-value lst-b (car lst-a))))))
+    (cond
+        ((and (null lst-a) (null lst-b))
+            T
+        )
+        ((or (null lst-a) (null lst-b))
+            nil
+        )
+        (t
+            (equal-set (cdr lst-a) (remove-value lst-b (car lst-a)))
+        )
+    )
+)
 (defun remove-value (lst v)
-    (cond((null lst)nil)(t((lambda (e)
-                (cond((= (car lst) v)e)
-                    (t(cons (car lst) e)))) (remove-value (cdr lst) v)))))
+    (cond
+        ((null lst)
+            nil
+        )
+        (t
+            ((lambda (e)
+                (cond
+                    ((= (car lst) v)
+                        e
+                    )
+                    (t
+                        (cons (car lst) e)
+                    )
+                )
+            ) (remove-value (cdr lst) v))
+        )
+    )
+)
 
-
-;
-;------------------------------------------------------------------------------
-;
+;;; Test 1
+(write-line "Test 1")
+(princ ">> (1 2 3) == (3 2 1)")
 (print (equal-set '(1 2 3) '(3 2 1)))
+(write-line "")
+
+;;; Test 2
+(write-line "Test 2")
+(princ ">> (1 2 4) == (4 5 6)")
 (print (equal-set '(1 2 3) '(4 5 6)))
+(write-line "")
+
+;;; Test 3
+(write-line "Test 3")
+(princ ">> (1 2) == (1 2 3)")
 (print (equal-set '(1 2) '(1 2 3)))
+(write-line "")
+
+;;; Test 4
+(write-line "Test 4")
+(princ ">> () == ()")
 (print (equal-set '() '()))
+(write-line "")
+
+
+
 ;
 ;------------------------------------------------------------------------------
 ;
 
-; Задание 36
-;Определите функцию ПОДМНОЖЕСТВО, которая проверяет, является ли одно множество подмножеством другого. 
-; Определите также СОБСТВЕННОЕ-ПОДМНОЖЕСТВО.
+; #36 Определите предикат НЕПЕРЕСЕКАЮЩИЕСЯ, проверяющий, что два множества не
+; пересекаются, т.е. у них нет общих элементов.
 
 (defun intersect (lst-a lst-b)
-    (cond((null lst-a)nil)
-        ((list-contains lst-b (car lst-a))t)
-            (t(intersect (cdr lst-a) lst-b))))
+    (cond
+        ((null lst-a)
+            nil
+        )
+        ((list-contains lst-b (car lst-a))
+            t
+        )
+        (t
+            (intersect (cdr lst-a) lst-b)
+        )
+    )
+)
 (defun list-contains (lst v)
-    (cond((null lst)nil)((= (car lst) v)t)
-        (t(list-contains (cdr lst) v))))
+    (cond
+        ((null lst)
+            nil
+        )
+        ((= (car lst) v)
+            t
+        )
+        (t
+            (list-contains (cdr lst) v)
+        )
+    )
+)
 
-;
-;------------------------------------------------------------------------------
-;
+;;; Test 1
+(write-line "Test 1")
+(princ ">> (1 2 3) & (3 4 5)")
 (print (intersect '(1 2 3) '(3 4 5)))
+(write-line "")
+
+;;; Test 2
+(write-line "Test 2")
+(princ ">> (1 2 3) & (4 5 6)")
 (print (intersect '(1 2 3) '(4 5 6)))
+(write-line "")
+
+
 
 ;
 ;------------------------------------------------------------------------------
 ;
 
 
+; #40 Определите функцию РАЗНОСТЬ, формирующую разность двух множеств, т.е.
+; удаляющую из первого множества все общие со вторым множеством элементы.
+
+
+(defun subtract (lst-a lst-b)
+    (cond
+        ((null lst-b)
+            lst-a
+        )
+        (t
+            (subtract (remove-value lst-a (car lst-b)) (cdr lst-b))
+        )
+    )
+)
+
+;;; Test 1
+(write-line "Test 1")
+(princ ">> (1 2 3) / (2 3 4)")
+(print (subtract '(1 2 3) '(2 3 4)))
+(write-line "")
+
+;;; Test 2
+(write-line "Test 2")
+(princ ">> (1 2 3) / (4 5 6)")
+(print (subtract '(1 2 3) '(4 5 6)))
+(write-line "")
 
 
 
+;
+;------------------------------------------------------------------------------
+;
+
+
+; #45 Предположим, что у имени города есть свойства х и у, которые содержат координаты
+; места нахождения города относительнонекоторого начала координат.
+
+
+(defun distance (city-a city-b)
+    (sqrt (+
+        (expt
+            (- (get city-a 'x) (get city-b 'x))
+        2)
+        (expt
+            (- (get city-a 'y) (get city-b 'y))
+        2)
+    ))
+)
+(defun make-city (name x y)
+        (setf (get name 'x) x)
+        (setf (get name 'y) y)
+)
+
+;;; Test 1
+(write-line "Test 1")
+(princ ">> {0, 3} {4, 0}")
+(make-city 'city1 0 3)
+(make-city 'city2 4 0)
+(print (distance 'city1 'city2))
+(write-line "")
+
+;; Test 2
+(write-line "Test 2")
+(princ ">> {34, 56} {71, 66}")
+(make-city 'city1 34 56)
+(make-city 'city2 71 66)
+(print (distance 'city1 'city2))
+(write-line "")
 
 
 
+;
+;------------------------------------------------------------------------------
+;
 
+
+; #46 Предположим, что отец и мать некоторого лица, хранятся как значения соответствующих свойств у символа, 
+; обозначающего это лицо. Напишите функцию (РОДИТЕЛИ x), которая возвращает в качестве значения родителей,
+; и предикат (СЕСТРЫ-БРАТЬЯ x1 x2), который истинен в случае, если x1 и x2 — сестры или братья, родные или с одним общим родителем
+
+
+
+(defun make-child (name p1 p2)
+    (setf (get name 'p1) p1)
+    (setf (get name 'p2) p2)
+)
+(defun parents (x)
+    (cons
+        (get x 'p1)
+        (cons
+            (get x 'p2)
+            nil
+        )
+    )
+)
+(defun relatives (x1 x2)
+    ((lambda (e1 e2)
+        (or
+            (string= (car e1) (car e2))
+            (string= (cadr e1) (car e2))
+            (string= (car e1) (cadr e2))
+            (string= (cadr e1) (cadr e2))
+        )
+    ) (parents x1) (parents x2))
+)
+
+(make-child 'Vika 'A 'B)
+(make-child 'Dasha 'B 'C)
+(make-child 'Ira 'C 'D)
+;; Test 1
+(write-line "Test 1")
+(princ ">> Vika and Dasha")
+(print (relatives 'Vika 'Dasha))
+(write-line "")
+
+;; Test 2
+(write-line "Test 2")
+(princ ">> Vika and Ira")
+(print (relatives 'Vika 'Ira))
+(write-line "")
