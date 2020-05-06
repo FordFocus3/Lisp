@@ -1,3 +1,6 @@
+1 3 7 11
+
+
 ;;; #1
 ;;; Определить funcall через apply
 
@@ -26,6 +29,10 @@
 ; x = (x1 x2 ... xn)
 ;и возвращает список, сформированный из результатов.
 ;   (mapcar (lambda (f a) (apply f a)) funcs args))
+
+
+(defun apl-apply (funcs args)
+    (mapcar (lambda (f a) (apply f a)) funcs args))
 
 ;;; Test #1
 (print (apl-apply '(min max) '((1 2 3) (1 2 3))))
