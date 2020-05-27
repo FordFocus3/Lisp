@@ -127,3 +127,9 @@ sumAB :: Triple -> Int
 sumAB triple = triple.a + triple.b
 ```
 Это довольно серьезная ошибка. Ошибка компилятора, которую вы получаете от этой ошибки, немного сбивает с толку, так что будьте осторожны!
+
+```
+Сылки:
+Сайт разработчика https://www.purescript.org;
+Страница в Википедии https://en.wikipedia.org/wiki/PureScript;
+```
