@@ -34,3 +34,19 @@
 (print (popp stack1))
 (print stack1)
 (write-line "")
+
+;;; #3
+;;; Определите лисповскую форму (IF условие p q) в виде макроса
+
+(defmacro iff (q p n)
+    `(cond
+        (,q ,p)
+        (,t ,n)
+    )
+)
+
+;;; Test #3
+(princ "  Test for task #3")
+(print (iff (> 3 2) 1 2))
+(print (iff (< 3 2) 1 2))
+(write-line "")
