@@ -132,3 +132,4 @@ sumAB triple = triple.a + triple.b
 # Ссылки:
 * Сайт разработчика https://www.purescript.org;
 * Страница в Википедии https://en.wikipedia.org/wiki/PureScript;
+* GitHub https://github.com/purescript;
